@@ -1,5 +1,18 @@
 <?php
-class WC_Crypto_Gateway extends WC_Payment_Gateway {
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
+/**
+ * Criptopago Payment Gateway
+ *
+ * @class WC_Gateway_CriptoPago
+ * @extends WC_Payment_Gateway
+ */
+class WC_Gateway_CriptoPago extends WC_Payment_Gateway {
+    /**
+     * Constructor for the gateway.
+     */
     public function __construct() {
         $this->id = 'crypto';
         $this->icon = ''; // URL to the icon
@@ -24,6 +37,9 @@ class WC_Crypto_Gateway extends WC_Payment_Gateway {
         add_action('woocommerce_thankyou_' . $this->id, array($this, 'thank_you_page'));
     }
 
+    /**
+     * Initialize Gateway Settings Form Fields
+     */
     public function init_form_fields() {
         $this->form_fields = array(
             'enabled' => array(
@@ -74,6 +90,9 @@ class WC_Crypto_Gateway extends WC_Payment_Gateway {
         );
     }
 
+    /**
+     * Get Bitcoin price from API
+     */
     private function get_btc_price() {
         $api_url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=brl';
         
@@ -93,6 +112,9 @@ class WC_Crypto_Gateway extends WC_Payment_Gateway {
         return false;
     }
 
+    /**
+     * Calculate BTC amount from order total
+     */
     private function calculate_btc_amount($order_total) {
         $btc_price = $this->get_btc_price();
         
@@ -103,6 +125,9 @@ class WC_Crypto_Gateway extends WC_Payment_Gateway {
         return $order_total / $btc_price;
     }
 
+    /**
+     * Payment fields displayed on the checkout page
+     */
     public function payment_fields() {
         if ($this->description) {
             echo wpautop(wptexturize($this->description));
@@ -139,6 +164,9 @@ class WC_Crypto_Gateway extends WC_Payment_Gateway {
         }
     }
 
+    /**
+     * Process the payment
+     */
     public function process_payment($order_id) {
         $order = wc_get_order($order_id);
         $btc_amount = $this->calculate_btc_amount($order->get_total());
@@ -169,6 +197,9 @@ class WC_Crypto_Gateway extends WC_Payment_Gateway {
         );
     }
 
+    /**
+     * Thank you page
+     */
     public function thank_you_page($order_id) {
         $order = wc_get_order($order_id);
         if ($order->get_payment_method() === $this->id) {

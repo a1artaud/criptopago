@@ -18,11 +18,6 @@
 
 defined('ABSPATH') || exit;
 
-// Make sure WooCommerce is active
-if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
-    return;
-}
-
 /**
  * Declare HPOS compatibility
  */
@@ -32,41 +27,41 @@ add_action('before_woocommerce_init', function() {
     }
 });
 
-if (!class_exists('WP_Crypto_Payments')) {
-    class WP_Crypto_Payments {
-        public function __construct() {
-            add_action('plugins_loaded', array($this, 'init'));
-        }
-
-        public function init() {
-            // Load plugin text domain
-            load_plugin_textdomain('wp-crypto-payments', false, dirname(plugin_basename(__FILE__)) . '/languages');
-
-            // Include the gateway class
-            require_once plugin_dir_path(__FILE__) . 'includes/class-wc-crypto-gateway.php';
-
-            // Add the gateway to WooCommerce
-            add_filter('woocommerce_payment_gateways', array($this, 'add_gateway_class'));
-
-            // Add settings link on plugin page
-            $plugin = plugin_basename(__FILE__);
-            add_filter("plugin_action_links_$plugin", array($this, 'plugin_settings_link'));
-        }
-
-        public function add_gateway_class($gateways) {
-            $gateways[] = 'WC_Crypto_Gateway';
-            return $gateways;
-        }
-
-        public function plugin_settings_link($links) {
-            $settings_link = '<a href="admin.php?page=wc-settings&tab=checkout&section=crypto">' . __('Settings', 'wp-crypto-payments') . '</a>';
-            array_unshift($links, $settings_link);
-            return $links;
-        }
+/**
+ * Initialize the gateway class
+ */
+function criptopago_init_gateway_class() {
+    // Check if WooCommerce is active
+    if (!class_exists('WC_Payment_Gateway')) {
+        return;
     }
 
-    // Initialize the plugin
-    add_action('plugins_loaded', function() {
-        new WP_Crypto_Payments();
-    });
+    // Include the gateway class
+    require_once plugin_dir_path(__FILE__) . 'includes/class-wc-crypto-gateway.php';
+
+    // Register the gateway with WooCommerce
+    add_filter('woocommerce_payment_gateways', 'criptopago_add_gateway_class');
 }
+
+/**
+ * Add the gateway to WooCommerce
+ */
+function criptopago_add_gateway_class($gateways) {
+    $gateways[] = 'WC_Gateway_CriptoPago';
+    return $gateways;
+}
+
+/**
+ * Add settings link on plugin page
+ */
+function criptopago_plugin_settings_link($links) {
+    $settings_link = '<a href="admin.php?page=wc-settings&tab=checkout&section=crypto">' . __('Settings', 'wp-crypto-payments') . '</a>';
+    array_unshift($links, $settings_link);
+    return $links;
+}
+
+// Initialize the plugin
+add_action('plugins_loaded', 'criptopago_init_gateway_class', 11);
+
+// Add settings link
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'criptopago_plugin_settings_link');
