@@ -38,6 +38,51 @@ class WC_Gateway_CriptoPago extends WC_Payment_Gateway {
     }
 
     /**
+     * Check if this gateway is available for the current cart/order.
+     *
+     * @return bool
+     */
+    public function is_available() {
+        // Basic availability check
+        if ('yes' !== $this->enabled) {
+            return false;
+        }
+
+        // Check if we have a Bitcoin address configured
+        if (empty($this->bitcoin_address)) {
+            return false;
+        }
+
+        // Check if we're on checkout or in admin
+        if (is_admin()) {
+            return true;
+        }
+
+        // Get the order total
+        $total = 0;
+        if (isset(WC()->cart)) {
+            $total = WC()->cart->get_total('');
+        }
+
+        // Don't show gateway for zero-value carts
+        if ($total <= 0) {
+            return false;
+        }
+
+        // Check if we can get a Bitcoin price
+        if (!$this->get_btc_price()) {
+            return false;
+        }
+
+        // Check if the store currency is BRL
+        if ('BRL' !== get_woocommerce_currency()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Initialize Gateway Settings Form Fields
      */
     public function init_form_fields() {
