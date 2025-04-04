@@ -1,0 +1,70 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Criptopago\n"
+"POT-Creation-Date: 2024-03-19 10:00+0000\n"
+"PO-Revision-Date: 2024-03-19 10:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Criptopago requires WooCommerce to be installed and active."
+msgstr "Criptopago requer que o WooCommerce esteja instalado e ativo."
+
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "Accept cryptocurrency payments in your store"
+msgstr "Aceite pagamentos em criptomoedas em sua loja"
+
+msgid "Enable/Disable"
+msgstr "Ativar/Desativar"
+
+msgid "Enable Criptopago"
+msgstr "Ativar Criptopago"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "Payment method title that the customer will see on your checkout."
+msgstr "Título do método de pagamento que o cliente verá no checkout."
+
+msgid "Criptopago"
+msgstr "Criptopago"
+
+msgid "Description"
+msgstr "Descrição"
+
+msgid "Payment method description that the customer will see on your checkout."
+msgstr "Descrição do método de pagamento que o cliente verá no checkout."
+
+msgid "Pay with Bitcoin or other cryptocurrencies"
+msgstr "Pague com Bitcoin ou outras criptomoedas"
+
+msgid "Bitcoin Address"
+msgstr "Endereço Bitcoin"
+
+msgid "Your Bitcoin wallet address where payments will be sent."
+msgstr "Seu endereço da carteira Bitcoin onde os pagamentos serão enviados."
+
+msgid "You will receive payment instructions after placing the order."
+msgstr "Você receberá as instruções de pagamento após fazer o pedido."
+
+msgid "Awaiting cryptocurrency payment"
+msgstr "Aguardando pagamento em criptomoeda"
+
+msgid "Payment Instructions"
+msgstr "Instruções de Pagamento"
+
+msgid "Please send the exact amount in BTC to the following address:"
+msgstr "Por favor, envie o valor exato em BTC para o seguinte endereço:"
+
+msgid "Your order will be processed once the payment is confirmed on the blockchain."
+msgstr "Seu pedido será processado assim que o pagamento for confirmado na blockchain."
