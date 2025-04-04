@@ -15,6 +15,11 @@
 
 defined('ABSPATH') || exit;
 
+// Make sure WooCommerce is active
+if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+    return;
+}
+
 if (!class_exists('WP_Crypto_Payments')) {
     class WP_Crypto_Payments {
         public function __construct() {
@@ -22,14 +27,11 @@ if (!class_exists('WP_Crypto_Payments')) {
         }
 
         public function init() {
-            // Check if WooCommerce is active
-            if (!class_exists('WC_Payment_Gateway')) {
-                add_action('admin_notices', array($this, 'woocommerce_missing_notice'));
-                return;
-            }
-
             // Load plugin text domain
             load_plugin_textdomain('wp-crypto-payments', false, dirname(plugin_basename(__FILE__)) . '/languages');
+
+            // Include the gateway class
+            require_once plugin_dir_path(__FILE__) . 'includes/class-wc-crypto-gateway.php';
 
             // Add the gateway to WooCommerce
             add_filter('woocommerce_payment_gateways', array($this, 'add_gateway_class'));
@@ -37,14 +39,6 @@ if (!class_exists('WP_Crypto_Payments')) {
             // Add settings link on plugin page
             $plugin = plugin_basename(__FILE__);
             add_filter("plugin_action_links_$plugin", array($this, 'plugin_settings_link'));
-        }
-
-        public function woocommerce_missing_notice() {
-            ?>
-            <div class="error">
-                <p><?php _e('Criptopago requires WooCommerce to be installed and active.', 'wp-crypto-payments'); ?></p>
-            </div>
-            <?php
         }
 
         public function add_gateway_class($gateways) {
@@ -60,8 +54,7 @@ if (!class_exists('WP_Crypto_Payments')) {
     }
 
     // Initialize the plugin
-    new WP_Crypto_Payments();
-
-    // Include the gateway class
-    require_once plugin_dir_path(__FILE__) . 'includes/class-wc-crypto-gateway.php';
+    add_action('plugins_loaded', function() {
+        new WP_Crypto_Payments();
+    });
 }
