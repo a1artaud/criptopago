@@ -11,6 +11,9 @@
  * Requires PHP: 7.4
  * WC requires at least: 5.0
  * WC tested up to: 8.0
+ * Requires at least: 5.0
+ *
+ * @package Criptopago
  */
 
 defined('ABSPATH') || exit;
@@ -19,6 +22,15 @@ defined('ABSPATH') || exit;
 if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
     return;
 }
+
+/**
+ * Declare HPOS compatibility
+ */
+add_action('before_woocommerce_init', function() {
+    if (class_exists('\Automattic\WooCommerce\Utilities\FeaturesUtil')) {
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true);
+    }
+});
 
 if (!class_exists('WP_Crypto_Payments')) {
     class WP_Crypto_Payments {
